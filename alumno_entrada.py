@@ -8,7 +8,7 @@ import numpy
 
 #Main window configuration:
 window = ttkbootstrap.Window(themename='superhero')
-window.title('Ingreso datos docente')
+window.title('Ingreso datos alumno')
 window.geometry('370x390')
 window.resizable()
 
@@ -26,13 +26,13 @@ def label_config(text_label, font_label, x_label, y_label):
 
 def load_data():
     """
-    This function lets the user to load information about a teacher into an Excel file,
-    setting a teacher's code automatically.
+    This function lets the user to load information about a student into an Excel file,
+    setting a student's code automatically.
     
     No arguments need for this function.
     """
     file = openpyxl.load_workbook('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx')
-    sheet = file['docente']
+    sheet = file['alumno']
     
     first_value = sheet.cell(column=1, row=sheet.max_row).value
     counter = 0
@@ -49,11 +49,11 @@ def load_data():
     data_birthday = entry_birthday.get()
     data_phone = entry_phone.get()
     data_email = entry_email.get()
-    data_faculty = combobox_code_faculty.get()
+    data_career = combobox_code_career.get()
     date = datetime.datetime.now()
     data_date = date.strftime('%d/%m/%Y %H:%M:%S')
     
-    if data_name=='' or data_last_name=='' or data_gender=='' or data_birthday=='' or data_phone=='' or data_email=='' or data_faculty=='':
+    if data_name=='' or data_last_name=='' or data_gender=='' or data_birthday=='' or data_phone=='' or data_email=='' or data_career=='':
         Messagebox.show_error('Falta información por ingresar', title='Error!')
     elif '/' not in data_birthday:
         Messagebox.show_error('Ingrese la fecha de nacimiento en formato 00/00/0000', title='Error!')
@@ -62,7 +62,7 @@ def load_data():
     elif '@' not in data_email:
         Messagebox.show_error('Ingrese el correo electrónico en formato micorreo@mail.com', title='Error!')
     else:
-        sheet.cell(column=2, row=sheet.max_row, value='DOC0000' + str(counter))
+        sheet.cell(column=2, row=sheet.max_row, value='ALU0000' + str(counter))
         sheet.cell(column=3, row=sheet.max_row, value=data_name)
         sheet.cell(column=4, row=sheet.max_row, value=data_last_name)
         sheet.cell(column=5, row=sheet.max_row, value=data_gender)
@@ -70,34 +70,37 @@ def load_data():
         sheet.cell(column=7, row=sheet.max_row, value=data_phone)
         sheet.cell(column=8, row=sheet.max_row, value=data_email)
         sheet.cell(column=9, row=sheet.max_row, value=data_date)
-        sheet.cell(column=10, row=sheet.max_row, value=data_faculty)
+        sheet.cell(column=10, row=sheet.max_row, value=data_career)
         entry_name.delete(0, END)
         entry_last_name.delete(0, END)
         combobox_gender.delete(0, END)
         entry_birthday.delete(0, END)
         entry_phone.delete(0, END)
         entry_email.delete(0, END)
-        combobox_code_faculty.delete(0, END)
+        combobox_code_career.delete(0, END)
         file.save('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx')
         Messagebox.show_info('Información cargada correctamente', title='Felicidades')
 
-def faculty_check():
+def career_check():
     
     """
     
-    This functions helps the user to know what is the name of the faculty asociated with a code.
+    This functions helps the user to know what is the name of the career asociated with a code.
     
     No arguments taken.
     
     """
     
-    faculty_name_nparray = (faculty_sheet[faculty_sheet['CODIGO_FACULTAD']==combobox_code_faculty.get()]['NOMBRE_FACULTAD']).values
-    faculty_name_str = numpy.array_str(faculty_name_nparray)
-    faculty_name_str_final = faculty_name_str[2:len(faculty_name_str)-2]
-    if faculty_name_str_final != '':
-        Messagebox.show_info('El código corresponde a: ' + faculty_name_str_final, title='Información facultad')
+    career_name_nparray = (career_sheet[career_sheet['CODIGO_CARRERA']==combobox_code_career.get()]['NOMBRE_CARRERA']).values
+    career_degree_nparray = (career_sheet[career_sheet['CODIGO_CARRERA']==combobox_code_career.get()]['GRADO_CARRERA']).values
+    career_name_str = numpy.array_str(career_name_nparray)
+    career_degree_str = numpy.array_str(career_degree_nparray)
+    career_name_str_final = career_name_str[2:len(career_name_str)-2]
+    career_degree_str_final = career_degree_str[2:len(career_degree_str)-2]
+    if career_name_str_final != '':
+        Messagebox.show_info('El código corresponde a: ' + career_name_str_final + ' ' + career_degree_str_final, title='Información carrera')
     else:
-        Messagebox.show_error('Ingrese el código de facultad.', title='Error!')
+        Messagebox.show_error('Ingrese el código de la carrera.', title='Error!')
         
 #-----------------------------------------------------------------------------------------------------------
 
@@ -132,18 +135,18 @@ label_config('Email', ('Samanata', 11), 10, 220)
 entry_email = ttkbootstrap.Entry(window, bootstyle='primary')
 entry_email.place(x=100, y=220)
 
-#Faculty code:
-label_config('Código facultad', ('Samanata', 11), 10, 260)
-faculty_sheet = pandas.read_excel('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx', sheet_name='facultad')
-code_faculty = faculty_sheet['CODIGO_FACULTAD']
-code_faculty_list = list(code_faculty)
-combobox_code_faculty = ttkbootstrap.Combobox(window, values=code_faculty_list, bootstyle='primary')
-combobox_code_faculty.place(x=140, y=260)
+#Career code:
+label_config('Código carrera', ('Samanata', 11), 10, 260)
+career_sheet = pandas.read_excel('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx', sheet_name='carrera')
+code_career = career_sheet['CODIGO_CARRERA']
+code_career_list = list(code_career)
+combobox_code_career = ttkbootstrap.Combobox(window, values=code_career_list, bootstyle='primary')
+combobox_code_career.place(x=140, y=260)
 
 #Load button:
 load_button = ttkbootstrap.Button(text='Subir', command=load_data, bootstyle='success').place(x=90, y=325)
 
-#Faculty button:
-faculty_button = ttkbootstrap.Button(text='Facultad', command=faculty_check, bootstyle='warning').place(x=190, y=325)
+#Career button:
+career_button = ttkbootstrap.Button(text='Carrera', command=career_check, bootstyle='warning').place(x=190, y=325)
 
 window.mainloop()
