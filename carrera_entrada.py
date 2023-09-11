@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 import ttkbootstrap
 from ttkbootstrap.dialogs import Messagebox
@@ -7,9 +8,9 @@ import pandas
 import numpy
 
 #Main window configuration:
-window = ttkbootstrap.Window(themename='superhero')
-window.title('Ingreso datos carrera')
-window.geometry('370x250')
+window = ttkbootstrap.Window(themename='minty')
+window.title('Creación de carrera')
+window.geometry('390x285')
 window.resizable()
 
 #My functions:
@@ -21,8 +22,6 @@ def label_config(text_label, font_label, x_label, y_label):
     >>>lable_config('Hello, I am a label', ('Helvetica', 28), 10, 10)
     """
     ttkbootstrap.Label(window, text=text_label, font=font_label).place(x=x_label, y=y_label)
-
-#-----------------------------------------------------------------------------------------------------------
 
 def load_data():
     """
@@ -67,15 +66,11 @@ def load_data():
         Messagebox.show_info('Información cargada correctamente', title='Felicidades')
 
 def faculty_check():
-    
     """
-    
     This functions helps the user to know what is the name of the faculty asociated with a code.
     
     No arguments taken.
-    
     """
-    
     faculty_name_nparray = (faculty_sheet[faculty_sheet['CODIGO_FACULTAD']==combobox_code_faculty.get()]['NOMBRE_FACULTAD']).values
     faculty_name_str = numpy.array_str(faculty_name_nparray)
     faculty_name_str_final = faculty_name_str[2:len(faculty_name_str)-2]
@@ -86,35 +81,40 @@ def faculty_check():
         
 #-----------------------------------------------------------------------------------------------------------
 
+#Main frame
+
+main_frame = tkinter.LabelFrame(window, text='Creación de carrera')
+main_frame.place(x=10, y=10, width=365, height=260)
+
 #Name field:
-label_config('Carrera', ('Samanata', 11), 10, 20)
-entry_name = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_name.place(x=100, y=20)
+label_config('Carrera', ('Helvetica', 11), 30, 50)
+entry_name = ttkbootstrap.Entry(window)
+entry_name.place(x=100, y=50)
 
 #Degree field:
-label_config('Grado', ('Samanata', 11), 10, 60)
+label_config('Grado', ('Helvetica', 11), 30, 90)
 degree = ['TÉCNICO', 'LICENCIATURA', 'MAESTRÍA', 'DOCTORADO']
-combobox_degree = ttkbootstrap.Combobox(window,values=degree, bootstyle='primary')
-combobox_degree.place(x=100, y=60)
+combobox_degree = ttkbootstrap.Combobox(window,values=degree)
+combobox_degree.place(x=100, y=90)
 
 #Term field:
-label_config('Duración', ('Samanata', 11), 10, 100)
+label_config('Duración', ('Helvetica', 11), 30, 130)
 term = [1, 2, 3, 4, 5]
-combobox_term = ttkbootstrap.Combobox(window, values=term, bootstyle='primary')
-combobox_term.place(x=100, y=100)
+combobox_term = ttkbootstrap.Combobox(window, values=term)
+combobox_term.place(x=100, y=130)
 
 #Faculty code:
-label_config('Código facultad', ('Samanata', 11), 10, 140)
+label_config('Código facultad', ('Helvetica', 11), 30, 170)
 faculty_sheet = pandas.read_excel('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx', sheet_name='facultad')
 code_faculty = faculty_sheet['CODIGO_FACULTAD']
 code_faculty_list = list(code_faculty)
-combobox_code_faculty = ttkbootstrap.Combobox(window, values=code_faculty_list, bootstyle='primary')
-combobox_code_faculty.place(x=140, y=140)
+combobox_code_faculty = ttkbootstrap.Combobox(window, values=code_faculty_list)
+combobox_code_faculty.place(x=145, y=170)
 
 #Load button:
-load_button = ttkbootstrap.Button(text='Subir', command=load_data, bootstyle='success').place(x=90, y=180)
+load_button = ttkbootstrap.Button(text='Subir', command=load_data).place(x=110, y=220)
 
 #Faculty button:
-faculty_button = ttkbootstrap.Button(text='Facultad', command=faculty_check, bootstyle='warning').place(x=190, y=180)
+faculty_button = ttkbootstrap.Button(text='Facultad', command=faculty_check).place(x=210, y=220)
 
 window.mainloop()

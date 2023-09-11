@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 import ttkbootstrap
 from ttkbootstrap.dialogs import Messagebox
@@ -7,9 +8,9 @@ import pandas
 import numpy
 
 #Main window configuration:
-window = ttkbootstrap.Window(themename='superhero')
-window.title('Ingreso datos docente')
-window.geometry('370x390')
+window = ttkbootstrap.Window(themename='minty')
+window.title('Creación de docente')
+window.geometry('375x410')
 window.resizable()
 
 #My functions:
@@ -21,8 +22,6 @@ def label_config(text_label, font_label, x_label, y_label):
     >>>lable_config('Hello, I am a label', ('Helvetica', 28), 10, 10)
     """
     ttkbootstrap.Label(window, text=text_label, font=font_label).place(x=x_label, y=y_label)
-
-#-----------------------------------------------------------------------------------------------------------
 
 def load_data():
     """
@@ -82,15 +81,11 @@ def load_data():
         Messagebox.show_info('Información cargada correctamente', title='Felicidades')
 
 def faculty_check():
-    
     """
-    
     This functions helps the user to know what is the name of the faculty asociated with a code.
     
     No arguments taken.
-    
     """
-    
     faculty_name_nparray = (faculty_sheet[faculty_sheet['CODIGO_FACULTAD']==combobox_code_faculty.get()]['NOMBRE_FACULTAD']).values
     faculty_name_str = numpy.array_str(faculty_name_nparray)
     faculty_name_str_final = faculty_name_str[2:len(faculty_name_str)-2]
@@ -101,49 +96,54 @@ def faculty_check():
         
 #-----------------------------------------------------------------------------------------------------------
 
+#Main frame
+
+main_frame = tkinter.LabelFrame(window, text='Creación de docente')
+main_frame.place(x=10, y=10, width=355, height=385)
+
 #Name field:
-label_config('Nombre', ('Samanata', 11), 10, 20)
-entry_name = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_name.place(x=100, y=20)
+label_config('Nombre', ('Helvetica', 11), 30, 50)
+entry_name = ttkbootstrap.Entry(window)
+entry_name.place(x=100, y=50)
 
 #Last name field:
-label_config('Apellido', ('Samanata', 11), 10, 60)
-entry_last_name = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_last_name.place(x=100, y=60)
+label_config('Apellido', ('Helvetica', 11), 30, 90)
+entry_last_name = ttkbootstrap.Entry(window)
+entry_last_name.place(x=100, y=90)
 
 #Gender field:
-label_config('Genero', ('Samanata', 11), 10, 100)
+label_config('Genero', ('Helvetica', 11), 30, 130)
 gender = ['FEMENINO', 'MASCULINO']
-combobox_gender = ttkbootstrap.Combobox(window, values=gender, bootstyle='primary')
-combobox_gender.place(x=100, y=100)
+combobox_gender = ttkbootstrap.Combobox(window, values=gender)
+combobox_gender.place(x=100, y=130)
 
 #Birthday field:
-label_config('Fecha Nac.', ('Samanata', 11), 10, 140)
-entry_birthday = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_birthday.place(x=100, y=140)
+label_config('Fecha Nac.', ('Helvetica', 11), 30, 170)
+entry_birthday = ttkbootstrap.Entry(window)
+entry_birthday.place(x=125, y=170)
 
 #Phone field:
-label_config('Teléfono', ('Samanata', 11), 10, 180)
-entry_phone = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_phone.place(x=100, y=180)
+label_config('Teléfono', ('Helvetica', 11), 30, 210)
+entry_phone = ttkbootstrap.Entry(window)
+entry_phone.place(x=100, y=210)
 
 #Email field:
-label_config('Email', ('Samanata', 11), 10, 220)
-entry_email = ttkbootstrap.Entry(window, bootstyle='primary')
-entry_email.place(x=100, y=220)
+label_config('Email', ('Helvetica', 11), 30, 250)
+entry_email = ttkbootstrap.Entry(window)
+entry_email.place(x=100, y=250)
 
 #Faculty code:
-label_config('Código facultad', ('Samanata', 11), 10, 260)
+label_config('Código facultad', ('Helvetica', 11), 30, 290)
 faculty_sheet = pandas.read_excel('/home/bruce/Escritorio/Python/GUI/BD_SCHOOL_2023.xlsx', sheet_name='facultad')
 code_faculty = faculty_sheet['CODIGO_FACULTAD']
 code_faculty_list = list(code_faculty)
-combobox_code_faculty = ttkbootstrap.Combobox(window, values=code_faculty_list, bootstyle='primary')
-combobox_code_faculty.place(x=140, y=260)
+combobox_code_faculty = ttkbootstrap.Combobox(window, values=code_faculty_list)
+combobox_code_faculty.place(x=140, y=290)
 
 #Load button:
-load_button = ttkbootstrap.Button(text='Subir', command=load_data, bootstyle='success').place(x=90, y=325)
+load_button = ttkbootstrap.Button(text='Subir', command=load_data).place(x=110, y=350)
 
 #Faculty button:
-faculty_button = ttkbootstrap.Button(text='Facultad', command=faculty_check, bootstyle='warning').place(x=190, y=325)
+faculty_button = ttkbootstrap.Button(text='Facultad', command=faculty_check).place(x=210, y=350)
 
 window.mainloop()
