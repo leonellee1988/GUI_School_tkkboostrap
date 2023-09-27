@@ -1,4 +1,4 @@
-#GUI_School_ttkboostrap
+# GUI_School_ttkboostrap
 
 Dear coder.
 
